@@ -34,4 +34,6 @@ export class SocketIoAdapter implements IWebSocket {
 
 export const websocket = new SocketIoAdapter()
 
-websocket.init('http://localhost:4040', () => {})
+const { VITE_API_URI: API_URI } = import.meta.env
+
+websocket.init(API_URI, () => {})

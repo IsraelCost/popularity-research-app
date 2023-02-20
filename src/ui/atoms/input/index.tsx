@@ -50,7 +50,9 @@ const Input = ({ label, type, name, error, onChange, placeholder, mask, initial,
               if (mask) {
                 evt.target.value = InputMasks.execute(evt.target.value, mask)
               }
-              onChange(evt)
+              if (onChange) {
+                onChange(evt)
+              }
             }}
             placeholder={placeholder}
             defaultValue={initial}

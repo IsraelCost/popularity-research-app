@@ -6,6 +6,8 @@ import { IStorage, StorageKeys } from '../storage/contracts/storage'
 import { storage } from '../storage/cookies'
 import { ISurveyGateway, SurveyGatewayDTO } from './contracts/survey'
 
+const { VITE_API_URI: API_URI } = import.meta.env
+
 export class SurveyGateway implements ISurveyGateway {
   constructor (
     private readonly httpClient: IHttpClient,
@@ -38,7 +40,7 @@ export class SurveyGateway implements ISurveyGateway {
 
   async get (): Promise<Survey[]> {
     const surveyData = await this.httpClient.get({
-      url: 'http://localhost:4040/survey',
+      url: `${API_URI}/survey`,
       headers: this.headers
     })
 
@@ -48,7 +50,7 @@ export class SurveyGateway implements ISurveyGateway {
   async getOne (id: string): Promise<SurveyGatewayDTO.Safe | null> {
     try {
       const surveyData = await this.httpClient.get({
-        url: `http://localhost:4040/survey/${id}`
+        url: `${API_URI}/survey/${id}`
       })
 
       return surveyData
@@ -60,7 +62,7 @@ export class SurveyGateway implements ISurveyGateway {
   async getOneSecure (id: string): Promise<Survey | null> {
     try {
       const surveyData = await this.httpClient.get({
-        url: `http://localhost:4040/survey/${id}/secure`,
+        url: `${API_URI}/survey/${id}/secure`,
         headers: this.headers
       })
 
@@ -72,7 +74,7 @@ export class SurveyGateway implements ISurveyGateway {
 
   async create (data: Survey): Promise<Survey> {
     const surveyData = await this.httpClient.post({
-      url: 'http://localhost:4040/survey',
+      url: `${API_URI}/survey`,
       headers: this.headers,
       data: {
         label: data.label,
@@ -90,7 +92,7 @@ export class SurveyGateway implements ISurveyGateway {
 
   async update (id: string, data: Survey): Promise<Survey> {
     const surveyData = await this.httpClient.patch({
-      url: `http://localhost:4040/survey/${id}`,
+      url: `${API_URI}/survey/${id}`,
       headers: this.headers,
       data: {
         label: data.label,
@@ -108,14 +110,14 @@ export class SurveyGateway implements ISurveyGateway {
 
   async delete (id: string): Promise<void> {
     await this.httpClient.delete({
-      url: `http://localhost:4040/survey/${id}`,
+      url: `${API_URI}/survey/${id}`,
       headers: this.headers
     })
   }
 
   async vote ({ surveyId, questionId, optionId, ...data }: SurveyGatewayDTO.Vote): Promise<void> {
     await this.httpClient.post({
-      url: `http://localhost:4040/survey/${surveyId}/question/${questionId}/option/${optionId}/vote`,
+      url: `${API_URI}/survey/${surveyId}/question/${questionId}/option/${optionId}/vote`,
       data,
       headers: this.headers
     })
