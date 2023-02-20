@@ -70,7 +70,7 @@ export class SurveyGateway implements ISurveyGateway {
     }
   }
 
-  async create (data: SurveyGatewayDTO.Create): Promise<Survey> {
+  async create (data: Survey): Promise<Survey> {
     const surveyData = await this.httpClient.post({
       url: 'http://localhost:4040/survey',
       headers: this.headers,
@@ -88,7 +88,7 @@ export class SurveyGateway implements ISurveyGateway {
     return this.toModel(surveyData)
   }
 
-  async update (id: string, data: SurveyGatewayDTO.Update): Promise<Survey> {
+  async update (id: string, data: Survey): Promise<Survey> {
     const surveyData = await this.httpClient.patch({
       url: `http://localhost:4040/survey/${id}`,
       headers: this.headers,
