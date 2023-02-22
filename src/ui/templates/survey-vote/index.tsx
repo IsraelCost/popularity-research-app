@@ -3,7 +3,9 @@
 import { AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { City } from '../../../entities/city'
 import { Vote } from '../../../entities/vote'
+import { cityGateway } from '../../../infra/gateways/city'
 import { SurveyGatewayDTO } from '../../../infra/gateways/contracts/survey'
 import { surveyGateway } from '../../../infra/gateways/survey'
 import { StorageKeys } from '../../../infra/storage/contracts/storage'
@@ -27,12 +29,18 @@ const SurveyVote = () => {
 
   const [survey, setSurvey] = useState<SurveyGatewayDTO.Safe | null>(null)
 
+  const [city, setCity] = useState<City | null>(null)
+
   const [vote, setVote] = useState<Vote | null>(null)
 
   const loadSurvey = async () => {
     try {
       const surveyData = await surveyGateway.getOne(surveyId!)
       setSurvey(surveyData)
+      if (surveyData?.cityId) {
+        const cityData = await cityGateway.getOne(surveyData?.cityId)
+        setCity(cityData)
+      }
     } catch (error) {
       navigate('/admin/surveys')
     }
@@ -87,55 +95,58 @@ const SurveyVote = () => {
   if (!survey) return null
 
   return (
-    <S.Container>
-      <Title text={`${survey.label} valendo:`} />
-      <Card style={{ width: '30rem' }}>
-        <Thumb style={{ backgroundImage: `url(${survey.award.picture}?${new Date().getTime()})` }} />
-        <span>{survey.award.name}</span>
-      </Card>
-      {survey.questions.map(question => (
-        <S.CarouselContainer key={question.id}>
-          <Title text={question.label + ':'} size='medium' />
-          <SurveyCarousel
-            questionId={question.id}
-            onSend={onSendVote}
-            align='center'
-            vote={vote && !votedQuestions.find(id => id === question.id) ? { ...vote, questionId: question.id, surveyId: survey.id } : undefined}
-            options={question.options}
-          />
-        </S.CarouselContainer>
-      ))}
-      <AlertDialog
-        isOpen={isOpen}
-        onClose={onClose}
-        closeOnOverlayClick={false}
-        leastDestructiveRef={null as any}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent textAlign='center' borderRadius='20px' padding='4rem 3rem' maxWidth='45rem' gap='1rem' alignSelf='center' fontSize='1.6rem'>
-            <AlertDialogHeader fontWeight='bold' alignSelf='center' fontSize='1.8rem'>
-              Bem vindo à enquete de popularidade
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              Para votar, insira seu número de telefone
-            </AlertDialogBody>
-            <AlertDialogBody>
-              <Input
-                type='text'
-                name='phone'
-                placeholder='(11) 99999-9999'
-                mask={Masks.PHONE}
-                ref={phoneField.ref}
-                error={phoneField.errorConfig}
-              />
-            </AlertDialogBody>
-            <AlertDialogFooter justifyContent='space-between'>
-              <Button text='Votar' onClick={createVote} />
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </S.Container>
+    <>
+      {city && <S.CityLogo style={{ backgroundImage: `url(${city.picture}?${new Date().getTime()})` }} />}
+      <S.Container>
+        <Title text={`${survey.label} valendo:`} />
+        <Card style={{ width: '30rem' }}>
+          <Thumb style={{ backgroundImage: `url(${survey.award.picture}?${new Date().getTime()})` }} />
+          <span>{survey.award.name}</span>
+        </Card>
+        {survey.questions.map(question => (
+          <S.CarouselContainer key={question.id}>
+            <Title text={question.label + ':'} size='medium' />
+            <SurveyCarousel
+              questionId={question.id}
+              onSend={onSendVote}
+              align='center'
+              vote={vote && !votedQuestions.find(id => id === question.id) ? { ...vote, questionId: question.id, surveyId: survey.id } : undefined}
+              options={question.options}
+            />
+          </S.CarouselContainer>
+        ))}
+        <AlertDialog
+          isOpen={isOpen}
+          onClose={onClose}
+          closeOnOverlayClick={false}
+          leastDestructiveRef={null as any}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent textAlign='center' borderRadius='20px' padding='4rem 3rem' maxWidth='45rem' gap='1rem' alignSelf='center' fontSize='1.6rem'>
+              <AlertDialogHeader fontWeight='bold' alignSelf='center' fontSize='1.8rem'>
+                Bem vindo à enquete de popularidade
+              </AlertDialogHeader>
+              <AlertDialogBody>
+                Para votar, insira seu número de telefone
+              </AlertDialogBody>
+              <AlertDialogBody>
+                <Input
+                  type='text'
+                  name='phone'
+                  placeholder='(11) 99999-9999'
+                  mask={Masks.PHONE}
+                  ref={phoneField.ref}
+                  error={phoneField.errorConfig}
+                />
+              </AlertDialogBody>
+              <AlertDialogFooter justifyContent='space-between'>
+                <Button text='Votar' onClick={createVote} />
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </S.Container>
+    </>
   )
 }
 

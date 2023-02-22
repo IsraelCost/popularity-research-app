@@ -1,5 +1,16 @@
 import styled from '@emotion/styled'
 
+export const CityLogo = styled.div`
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
+`
+
 export const Header = styled.header`
   width: 100%;
   display: flex;
