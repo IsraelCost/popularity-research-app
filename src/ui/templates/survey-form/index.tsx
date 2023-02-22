@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ArrowUpIcon, DeleteIcon } from '@chakra-ui/icons'
-import { Alert, AlertIcon, FormLabel, Spinner } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { Alert, AlertIcon, FormLabel, Select, Spinner } from '@chakra-ui/react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Award } from '../../../entities/award'
+import { City } from '../../../entities/city'
 import { Option } from '../../../entities/option'
 import { Question } from '../../../entities/question'
 import { Survey } from '../../../entities/survey'
+import { cityGateway } from '../../../infra/gateways/city'
 import { surveyGateway } from '../../../infra/gateways/survey'
 import { base64Converter } from '../../../infra/utils/blob-base64-converter'
 import { idGenerator } from '../../../infra/utils/id-generator'
@@ -133,6 +135,34 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
     }
   }
 
+  const [cities, setCities] = useState<City[]>([])
+
+  const loadCities = async () => {
+    setLoading(true)
+    try {
+      const citiesData = await cityGateway.get()
+      setCities(citiesData)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+      setError(JSON.stringify(error))
+    }
+  }
+
+  useEffect(() => {
+    loadCities()
+  }, [])
+
+  const updateCity = async (entity: Survey, evt: any) => {
+    const { value } = evt.target
+    const city = cities.find(city => city.id === value)
+    entity.cityId = city ? value : ''
+    updateSurvey(survey)
+  }
+
+  console.log(survey)
+
   return (
     <S.Container>
       <Title text={survey.label} />
@@ -161,6 +191,19 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
         </FormLabel>
         <S.Thumb style={{ backgroundImage: `url(${survey.award.picture})` }} />
       </S.QuestionForm>
+      <Title text='Cidade' size='medium' />
+      <Select
+        borderRadius='20px'
+        fontSize='1.6rem'
+        height='5rem'
+        onChange={(evt) => { updateCity(survey, evt) }}
+        value={survey.cityId}
+      >
+        <option key='none' value='none'>Selecione uma cidade</option>
+        {cities.map(city => (
+          <option key={city.id} value={city.id}>{city.name}</option>
+        ))}
+      </Select>
       <S.Header>
         <Title text='Questões:' size='medium' />
         <Button text='Criar questão' onClick={createQuestion} />

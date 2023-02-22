@@ -16,6 +16,7 @@ const SurveyCreatePage = () => {
       picture: 'https://images.unsplash.com/photo-1578269174936-2709b6aeb913?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXdhcmR8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60'
     }
     survey.questions = []
+    survey.cityId = ''
 
     return survey
   }
@@ -29,6 +30,7 @@ const SurveyCreatePage = () => {
     newSurvey.label = data.label
     newSurvey.award = data.award
     newSurvey.questions = data.questions
+    newSurvey.cityId = data.cityId
 
     setSurvey(newSurvey)
   }
