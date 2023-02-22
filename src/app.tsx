@@ -3,6 +3,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Global from './global'
 import { AuthStore } from './ui/context/auth'
 import Admin from './ui/pages/admin'
+import CityPage from './ui/pages/city'
+import CityCreatePage from './ui/pages/city-create'
+import CityEditPage from './ui/pages/city-edit'
 import LoginPage from './ui/pages/login'
 import Main from './ui/pages/main'
 import SurveyPage from './ui/pages/survey'
@@ -26,6 +29,9 @@ const App = () => {
                 <Route path='/admin/surveys/create' element={<SurveyCreatePage />} />
                 <Route path='/admin/surveys/:id' element={<SurveyPage />} />
                 <Route path='/admin/surveys/:id/edit' element={<SurveyEditPage />} />
+                <Route path='/admin/cities/create' element={<CityCreatePage />} />
+                <Route path='/admin/cities/:id' element={<CityPage />} />
+                <Route path='/admin/cities/:id/edit' element={<CityEditPage />} />
               </Route>
             </Route>
           </Routes>
