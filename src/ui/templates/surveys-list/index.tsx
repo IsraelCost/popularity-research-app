@@ -1,7 +1,7 @@
 import { DeleteIcon, LinkIcon } from '@chakra-ui/icons'
 import { Spinner, Alert, AlertIcon, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, useDisclosure, Tooltip } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Survey } from '../../../entities/survey'
 import { surveyGateway } from '../../../infra/gateways/survey'
 import Button from '../../atoms/button'
@@ -10,7 +10,7 @@ import { useCopyToClipboard } from '../../hooks/use-copy-to-clipboard'
 import * as S from './styled'
 
 const SurveysList = () => {
-  const navigate = useNavigate()
+  const { push } = useRouter()
 
   const [surveys, setSurveys] = useState<Survey[]>([])
 
@@ -64,10 +64,10 @@ const SurveysList = () => {
       )}
       <S.Header>
         <Title text='Enquetes' />
-        <Button text='Criar enquete' onClick={() => { navigate('/admin/surveys/create') }} />
+        <Button text='Criar enquete' onClick={() => { push('/admin/surveys/create') }} />
       </S.Header>
       {surveys.map(survey => (
-        <S.Item key={survey.id} onClick={() => { navigate(`/admin/surveys/${survey.id}`, { state: survey }) }}>
+        <S.Item key={survey.id} onClick={() => { push(`/admin/surveys/${survey.id}`) }}>
           <span>{survey.label}</span>
           <S.Icons>
             <Tooltip hasArrow label='Copiar link' size='lg' fontSize='1.3rem' placement='top'>

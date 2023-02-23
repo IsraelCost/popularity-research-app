@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { Alert, AlertIcon, Spinner } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { ApplicationError } from '../../../entities/error'
 import { User, UserProfile } from '../../../entities/user'
 import { authGateway } from '../../../infra/gateways/auth'
@@ -23,7 +23,7 @@ const LoginForm = () => {
 
   const { setData } = useAuthContext()
 
-  const navigate = useNavigate()
+  const { push } = useRouter()
 
   const handler = async () => {
     // validation
@@ -43,7 +43,7 @@ const LoginForm = () => {
       Object.assign(user, userData)
       storage.set(StorageKeys.AUTH_TOKEN, jwt)
       setData(user, jwt)
-      navigate('/admin/surveys')
+      push('/admin/surveys')
     } catch (error) {
       setLoading(false)
       setError(JSON.stringify(error))

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ArrowUpIcon } from '@chakra-ui/icons'
 import { Alert, AlertIcon, FormLabel, Spinner } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { City } from '../../../entities/city'
 import { cityGateway } from '../../../infra/gateways/city'
 import { base64Converter } from '../../../infra/utils/blob-base64-converter'
@@ -41,7 +41,7 @@ const CityForm = ({ mode, city, updateCity }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
-  const navigate = useNavigate()
+  const { push } = useRouter()
 
   const send = async () => {
     setLoading(true)
@@ -51,7 +51,7 @@ const CityForm = ({ mode, city, updateCity }: Props) => {
       } else {
         await cityGateway.update(city.id, city)
       }
-      navigate('/admin/surveys')
+      push('/admin/surveys')
     } catch (error) {
       console.log(error)
       setLoading(false)

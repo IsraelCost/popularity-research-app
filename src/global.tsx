@@ -1,6 +1,6 @@
-import { Global as GlobalEm, css } from '@emotion/react'
+import { createGlobalStyle } from 'styled-components'
 
-const globalStyles = css`
+const Global = createGlobalStyle`
   :root {
     --font-family: 'Poppins', sans-serif;
   }
@@ -20,13 +20,5 @@ const globalStyles = css`
     overflow-x: hidden;
   }
 `
-
-const Global = () => {
-  return (
-    <GlobalEm
-      styles={globalStyles}
-    />
-  )
-}
 
 export default Global

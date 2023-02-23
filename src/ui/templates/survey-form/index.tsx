@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ArrowUpIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Alert, AlertIcon, FormLabel, Select, Spinner, Textarea } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Award } from '../../../entities/award'
 import { City } from '../../../entities/city'
 import { Option } from '../../../entities/option'
@@ -111,7 +111,7 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
-  const navigate = useNavigate()
+  const { push } = useRouter()
 
   const send = async () => {
     setLoading(true)
@@ -121,7 +121,7 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
       } else {
         await surveyGateway.update(survey.id, survey)
       }
-      navigate('/admin/surveys')
+      push('/admin/surveys')
     } catch (error) {
       console.log(error)
       setLoading(false)

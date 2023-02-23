@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { City } from '../../../entities/city'
 import { cityGateway } from '../../../infra/gateways/city'
 import Button from '../../atoms/button'
@@ -9,18 +9,16 @@ import { Card, Thumb } from '../survey-carousel/styled'
 import * as S from './styled'
 
 const CityAnalitics = () => {
-  const navigate = useNavigate()
-
-  const { id: cityId } = useParams()
+  const { push, query: { id: cityId } } = useRouter()
 
   const [city, setCity] = useState<City | null>(null)
 
   const loadCity = async () => {
     try {
-      const cityData = await cityGateway.getOne(cityId!)
+      const cityData = await cityGateway.getOne(cityId as any)
       setCity(cityData)
     } catch (error) {
-      navigate('/admin/surveys')
+      push('/admin/surveys')
     }
   }
 
@@ -34,7 +32,7 @@ const CityAnalitics = () => {
     <S.Container>
       <S.Header>
         <Title text={city.name} />
-        <Button text='Editar' onClick={() => { navigate(`/admin/cities/${city.id}/edit`) }} />
+        <Button text='Editar' onClick={() => { push(`/admin/cities/${city.id}/edit`) }} />
       </S.Header>
       <Card style={{ width: '30rem' }}>
         <Thumb style={{ backgroundImage: `url(${city.picture}?${new Date().getTime()})`, borderRadius: 'inherit' }} />

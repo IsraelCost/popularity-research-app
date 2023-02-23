@@ -1,7 +1,7 @@
 import { DeleteIcon } from '@chakra-ui/icons'
 import { Spinner, Alert, AlertIcon, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, useDisclosure, Tooltip } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { City } from '../../../entities/city'
 import { cityGateway } from '../../../infra/gateways/city'
 import Button from '../../atoms/button'
@@ -9,7 +9,7 @@ import Title from '../../atoms/title'
 import * as S from './styled'
 
 const CitiesList = () => {
-  const navigate = useNavigate()
+  const { push } = useRouter()
 
   const [cities, setCities] = useState<City[]>([])
 
@@ -61,10 +61,10 @@ const CitiesList = () => {
       )}
       <S.Header>
         <Title text='Cidades' />
-        <Button text='Criar cidade' onClick={() => { navigate('/admin/cities/create') }} />
+        <Button text='Criar cidade' onClick={() => { push('/admin/cities/create') }} />
       </S.Header>
       {cities.map(city => (
-        <S.Item key={city.id} onClick={() => { navigate(`/admin/cities/${city.id}`, { state: city }) }}>
+        <S.Item key={city.id} onClick={() => { push(`/admin/cities/${city.id}`) }}>
           <span>{city.name}</span>
           <S.Icons>
             <Tooltip hasArrow label='Deletar' size='lg' fontSize='1.3rem' placement='top'>

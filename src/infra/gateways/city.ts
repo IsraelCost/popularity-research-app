@@ -5,7 +5,7 @@ import { IStorage, StorageKeys } from '../storage/contracts/storage'
 import { storage } from '../storage/cookies'
 import { ICityGateway } from './contracts/city'
 
-const { VITE_API_URI: API_URI } = import.meta.env
+const { NEXT_PUBLIC_API_URI: API_URI } = process.env
 
 export class CityGateway implements ICityGateway {
   constructor (

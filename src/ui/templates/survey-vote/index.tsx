@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { City } from '../../../entities/city'
 import { Vote } from '../../../entities/vote'
 import { cityGateway } from '../../../infra/gateways/city'
@@ -23,9 +23,7 @@ import { Card, Thumb } from '../survey-carousel/styled'
 import * as S from './styled'
 
 const SurveyVote = () => {
-  const navigate = useNavigate()
-
-  const { id: surveyId } = useParams()
+  const { push, query: { id: surveyId } } = useRouter()
 
   const [survey, setSurvey] = useState<SurveyGatewayDTO.Safe | null>(null)
 
@@ -35,14 +33,14 @@ const SurveyVote = () => {
 
   const loadSurvey = async () => {
     try {
-      const surveyData = await surveyGateway.getOne(surveyId!)
+      const surveyData = await surveyGateway.getOne(surveyId as any)
       setSurvey(surveyData)
       if (surveyData?.cityId) {
         const cityData = await cityGateway.getOne(surveyData?.cityId)
         setCity(cityData)
       }
     } catch (error) {
-      navigate('/admin/surveys')
+      push('/admin/surveys')
     }
   }
 

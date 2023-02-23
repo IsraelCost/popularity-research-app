@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { City } from '../../../entities/city'
 import { cityGateway } from '../../../infra/gateways/city'
 import { SurveyGatewayDTO } from '../../../infra/gateways/contracts/survey'
@@ -13,24 +13,21 @@ import { Card, Thumb } from '../survey-carousel/styled'
 import * as S from './styled'
 
 const SurveyAnalitics = () => {
-  const navigate = useNavigate()
-
-  const { id: surveyId } = useParams()
+  const { push, query: { id: surveyId } } = useRouter()
 
   const [survey, setSurvey] = useState<SurveyGatewayDTO.Safe | null>(null)
   const [city, setCity] = useState<City | null>(null)
 
   const loadSurvey = async () => {
     try {
-      const surveyData = await surveyGateway.getOne(surveyId!)
-      console.log(surveyData)
+      const surveyData = await surveyGateway.getOne(surveyId as any)
       setSurvey(surveyData)
       if (surveyData?.cityId) {
         const cityData = await cityGateway.getOne(surveyData.cityId)
         setCity(cityData)
       }
     } catch (error) {
-      navigate('/admin/surveys')
+      push('/admin/surveys')
     }
   }
 
@@ -45,7 +42,7 @@ const SurveyAnalitics = () => {
     <S.Container>
       <S.Header>
         <Title text={survey.label} />
-        <Button text='Editar' onClick={() => { navigate(`/admin/surveys/${surveyId}/edit`) }} />
+        <Button text='Editar' onClick={() => { push(`/admin/surveys/${surveyId}/edit`) }} />
       </S.Header>
       <Title text='Prêmio:' size='medium' />
       <Card style={{ width: '30rem' }}>
