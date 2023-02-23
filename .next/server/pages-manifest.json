@@ -2,7 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/admin/surveys/[id]": "pages/admin/surveys/[id].js",
-  "/vote/[id]": "pages/vote/[id].js",
-  "/admin/surveys": "pages/admin/surveys.js"
+  "/vote/[id]": "pages/vote/[id].js"
 }
