@@ -73,7 +73,7 @@ const SurveysList = () => {
             <Tooltip hasArrow label='Copiar link' size='lg' fontSize='1.3rem' placement='top'>
               <LinkIcon onClick={(evt) => {
                 evt.stopPropagation()
-                copy(`${window.location.host}/vote/${survey.id}`)
+                copy(`${window.location.protocol}//${window.location.host}/vote/${survey.id}`)
               }} />
             </Tooltip>
             <Tooltip hasArrow label='Desativar enquete' size='lg' fontSize='1.3rem' placement='top'>
