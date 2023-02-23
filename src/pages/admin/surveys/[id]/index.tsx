@@ -1,6 +1,6 @@
 import SecureRoute from '../../../../ui/routes/secure'
 import SurveyAnalitics from '../../../../ui/templates/survey-analitics'
-import * as S from './styled'
+import * as S from '../../../../ui/pages/admin/surveys/[id]/styled'
 
 const SurveyPage = () => {
   return (

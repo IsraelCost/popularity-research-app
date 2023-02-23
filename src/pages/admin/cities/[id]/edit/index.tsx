@@ -4,7 +4,7 @@ import { City } from '../../../../../entities/city'
 import { cityGateway } from '../../../../../infra/gateways/city'
 import SecureRoute from '../../../../../ui/routes/secure'
 import CityForm from '../../../../../ui/templates/city-form'
-import * as S from './styled'
+import * as S from '../../../../../ui/pages/admin/cities/[id]/edit/styled'
 
 const CityEditPage = () => {
   const { push, query: { id: cityId } } = useRouter()

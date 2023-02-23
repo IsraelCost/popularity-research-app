@@ -4,7 +4,7 @@ import { Survey } from '../../../../../entities/survey'
 import { surveyGateway } from '../../../../../infra/gateways/survey'
 import SecureRoute from '../../../../../ui/routes/secure'
 import SurveyForm from '../../../../../ui/templates/survey-form'
-import * as S from './styled'
+import * as S from '../../../../../ui/pages/admin/surveys/[id]/edit/styled'
 
 const SurveyEditPage = () => {
   const { push, query: { id: surveyId } } = useRouter()

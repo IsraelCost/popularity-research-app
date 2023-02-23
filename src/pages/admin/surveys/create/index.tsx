@@ -3,7 +3,7 @@ import { Survey } from '../../../../entities/survey'
 import { idGenerator } from '../../../../infra/utils/id-generator'
 import SecureRoute from '../../../../ui/routes/secure'
 import SurveyForm from '../../../../ui/templates/survey-form'
-import * as S from './styled'
+import * as S from '../../../../ui/pages/admin/surveys/create/styled'
 
 const SurveyCreatePage = () => {
   const getSurvey = () => {

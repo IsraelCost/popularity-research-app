@@ -1,7 +1,7 @@
 import SecureRoute from '../../../ui/routes/secure'
 import CitiesList from '../../../ui/templates/cities-list'
 import SurveysList from '../../../ui/templates/surveys-list'
-import * as S from './styled'
+import * as S from '../../../ui/pages/admin/surveys/styled'
 
 const SurveysPage = () => {
   return (

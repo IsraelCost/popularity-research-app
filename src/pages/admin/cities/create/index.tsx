@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { City } from '../../../../entities/city'
 import SecureRoute from '../../../../ui/routes/secure'
 import CityForm from '../../../../ui/templates/city-form'
-import * as S from './styled'
+import * as S from '../../../../ui/pages/admin/cities/create/styled'
 
 const CityCreatePage = () => {
   const getCity = () => {
