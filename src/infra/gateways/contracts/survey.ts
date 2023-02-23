@@ -28,6 +28,7 @@ export namespace SurveyGatewayDTO {
       }[]
     }[]
     cityId?: string
+    term?: string
   }
 
   export type Vote = {

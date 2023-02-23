@@ -8,6 +8,7 @@ export class Survey {
   award!: Award
   questions!: Question[]
   cityId?: string
+  term?: string
 
   getQuestion (id: string) {
     const question = this.questions.find(searched => searched.id === id)

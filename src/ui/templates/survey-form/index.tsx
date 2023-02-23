@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ArrowUpIcon, DeleteIcon } from '@chakra-ui/icons'
-import { Alert, AlertIcon, FormLabel, Select, Spinner } from '@chakra-ui/react'
+import { Alert, AlertIcon, FormLabel, Select, Spinner, Textarea } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Award } from '../../../entities/award'
@@ -80,6 +80,12 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
   const updateName = async (entity: Award, evt: any) => {
     const { value } = evt.target
     entity.name = value
+    updateSurvey(survey)
+  }
+
+  const updateTerm = async (entity: Survey, evt: any) => {
+    const { value } = evt.target
+    entity.term = value
     updateSurvey(survey)
   }
 
@@ -173,6 +179,21 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
         initial={survey.label}
         onChange={(evt: any) => { updateLabel(survey, evt) }}
       />
+      <div
+        style={{ width: '100%' }}
+      >
+        <FormLabel
+          fontSize='1.6rem'
+        >Termo (aparece no poup-up no início da votação):</FormLabel>
+        <Textarea
+          name='survey-term'
+          width='100%'
+          fontSize='1.6rem'
+          borderRadius='20px'
+          defaultValue={survey.term}
+          onChange={(evt: any) => { updateTerm(survey, evt) }}
+        />
+      </div>
       <Title text='Prêmio' size='medium' />
       <S.QuestionForm>
         <Input

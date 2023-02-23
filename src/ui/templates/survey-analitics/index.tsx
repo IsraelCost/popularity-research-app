@@ -52,6 +52,16 @@ const SurveyAnalitics = () => {
         <Thumb style={{ backgroundImage: `url(${survey.award.picture}?${new Date().getTime()})` }} />
         <span>{survey.award.name}</span>
       </Card>
+      {survey.term && (
+        <>
+          <Title text='Termo:' size='medium' />
+          <p
+            style={{ fontSize: '1.6rem' }}
+          >
+            {survey.term}
+          </p>
+        </>
+      )}
       {city && (
         <>
           <Title text='Cidade:' size='medium' />

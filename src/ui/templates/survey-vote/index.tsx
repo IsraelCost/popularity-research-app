@@ -126,8 +126,8 @@ const SurveyVote = () => {
               <AlertDialogHeader fontWeight='bold' alignSelf='center' fontSize='1.8rem'>
                 Bem vindo à enquete de popularidade
               </AlertDialogHeader>
-              <AlertDialogBody>
-                Para votar, insira seu número de telefone
+              <AlertDialogBody textAlign='justify'>
+                {survey.term || 'Para votar, insira seu número de telefone'}
               </AlertDialogBody>
               <AlertDialogBody>
                 <Input

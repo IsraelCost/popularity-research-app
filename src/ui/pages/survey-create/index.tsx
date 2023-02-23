@@ -17,6 +17,7 @@ const SurveyCreatePage = () => {
     }
     survey.questions = []
     survey.cityId = ''
+    survey.term = ''
 
     return survey
   }
@@ -31,6 +32,7 @@ const SurveyCreatePage = () => {
     newSurvey.award = data.award
     newSurvey.questions = data.questions
     newSurvey.cityId = data.cityId
+    newSurvey.term = data.term
 
     setSurvey(newSurvey)
   }

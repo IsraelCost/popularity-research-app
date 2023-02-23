@@ -31,6 +31,7 @@ const SurveyEditPage = () => {
     newSurvey.questions = data.questions
     newSurvey.award = data.award
     newSurvey.cityId = data.cityId
+    newSurvey.term = data.term
 
     setSurvey(newSurvey)
   }

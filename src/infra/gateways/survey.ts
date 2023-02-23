@@ -84,7 +84,8 @@ export class SurveyGateway implements ISurveyGateway {
           label: question.label,
           options: question.options
         })),
-        cityId: data.cityId
+        cityId: data.cityId,
+        term: data.term
       }
     })
 
@@ -103,7 +104,8 @@ export class SurveyGateway implements ISurveyGateway {
           label: question.label,
           options: question.options
         })),
-        cityId: data.cityId
+        cityId: data.cityId,
+        term: data.term
       }
     })
 
