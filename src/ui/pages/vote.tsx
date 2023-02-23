@@ -32,8 +32,8 @@ const VotePage = () => {
   return (
     <>
       <Helmet>
-        <meta property="og:title" content={survey?.label} />
-        <meta property="og:image" content={city?.picture} />
+        <meta property="og:title" content={survey?.label || 'Outside pesquisas de popularidade'} />
+        <meta property="og:image" content={city?.picture || 'https://popularity-research.s3.sa-east-1.amazonaws.com/logo.jpg'} />
       </Helmet>
       <SurveyVote />
     </>
