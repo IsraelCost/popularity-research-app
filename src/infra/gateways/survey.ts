@@ -126,6 +126,14 @@ export class SurveyGateway implements ISurveyGateway {
       headers: this.headers
     })
   }
+
+  async manageVotes ({ options, questionId, surveyId }: SurveyGatewayDTO.ManageVotes): Promise<void> {
+    await this.httpClient.post({
+      url: `${API_URI}/survey/${surveyId}/question/${questionId}/manage-votes`,
+      data: { options },
+      headers: this.headers
+    })
+  }
 }
 
 export const surveyGateway = new SurveyGateway(httpClient, storage)

@@ -10,6 +10,7 @@ export interface ISurveyGateway {
   update: (id: string, input: Survey) => Promise<Survey>
   delete: (id: string) => Promise<void>
   vote: (input: SurveyGatewayDTO.Vote) => Promise<void>
+  manageVotes: (input: SurveyGatewayDTO.ManageVotes) => Promise<void>
 }
 
 export namespace SurveyGatewayDTO {
@@ -37,5 +38,16 @@ export namespace SurveyGatewayDTO {
     questionId: string
     optionId: string
     surveyId: string
+  }
+
+  export type Percentage = {
+    optionId: string
+    percentage: number
+  }
+
+  export type ManageVotes = {
+    surveyId: string
+    questionId: string
+    options: Percentage[]
   }
 }

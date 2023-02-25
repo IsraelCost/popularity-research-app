@@ -1,14 +1,16 @@
+/* eslint-disable no-unreachable-loop */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ArrowUpIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Alert, AlertIcon, FormLabel, Select, Spinner, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Award } from '../../../entities/award'
 import { City } from '../../../entities/city'
 import { Option } from '../../../entities/option'
 import { Question } from '../../../entities/question'
 import { Survey } from '../../../entities/survey'
 import { cityGateway } from '../../../infra/gateways/city'
+import { SurveyGatewayDTO } from '../../../infra/gateways/contracts/survey'
 import { surveyGateway } from '../../../infra/gateways/survey'
 import { base64Converter } from '../../../infra/utils/blob-base64-converter'
 import { idGenerator } from '../../../infra/utils/id-generator'
@@ -89,29 +91,30 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
     updateSurvey(survey)
   }
 
-  const updateVotes = async (entity: Option, value: any) => {
-    const votes = [...entity.votes]
-
-    let qtdOfNewVotesVotes = +value - entity.votes.length
-
-    if (qtdOfNewVotesVotes > 0) {
-      while (qtdOfNewVotesVotes !== 0) {
-        votes.push({ deviceIp: 'root-device', phoneNumber: 'root-phone-number' })
-        qtdOfNewVotesVotes--
-      }
-    }
-
-    entity.votes = votes
-
-    updateSurvey(survey)
-  }
-
   const sendText = mode === 'create' ? 'Criar enquete' : 'Salvar'
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
   const { push } = useRouter()
+
+  const getInitialPercentages = useCallback(() => {
+    const map = new Map<string, SurveyGatewayDTO.Percentage[]>()
+
+    survey.questions.forEach(question => {
+      const percentages = question.options.map(option => {
+        return {
+          optionId: option.id,
+          percentage: question.getVotesPercentage(option.id)
+        }
+      })
+      map.set(question.id, percentages)
+    })
+
+    return map
+  }, [])
+
+  const percentages = useMemo(() => getInitialPercentages(), [])
 
   const send = async () => {
     setLoading(true)
@@ -121,23 +124,18 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
       } else {
         await surveyGateway.update(survey.id, survey)
       }
+      for (const question of survey.questions) {
+        await surveyGateway.manageVotes({
+          options: percentages.get(question.id)!,
+          questionId: question.id,
+          surveyId: survey.id
+        })
+      }
       push('/admin/surveys')
     } catch (error) {
       console.log(error)
       setLoading(false)
       setError(JSON.stringify(error))
-    }
-  }
-
-  const olderSurvey = useMemo(() => survey, [])
-
-  const getMinVotes = (questionId: string, optionId: string) => {
-    try {
-      const question = olderSurvey.getQuestion(questionId)
-      const option = question.getOption(optionId)
-      return option.votes.length
-    } catch (error) {
-      return 0
     }
   }
 
@@ -166,8 +164,6 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
     entity.cityId = city ? value : ''
     updateSurvey(survey)
   }
-
-  console.log(survey)
 
   return (
     <S.Container>
@@ -268,12 +264,18 @@ const SurveyForm = ({ mode, survey, updateSurvey }: Props) => {
                     onChange={(evt: any) => { updateLabel(option, evt) }}
                   />
                   <Input
-                    label='Número de votos'
+                    label='Porcentagem dos votos'
                     type='number'
                     name='option-votes'
-                    initial={option.votes.length}
-                    min={getMinVotes(question.id, option.id)}
-                    onChange={(evt: any) => { updateVotes(option, evt) }}
+                    initial={question.getVotesPercentage(option.id)}
+                    min={0}
+                    max={100}
+                    step={question.getMultiple()}
+                    onChange={(value: any) => {
+                      const percentage = percentages.get(question.id)!
+                      const percentageOfOption = percentage.find(percentage => percentage.optionId === option.id)!
+                      percentageOfOption.percentage = +value
+                    }}
                   />
                   <FormLabel fontSize='1.6rem'>Foto:</FormLabel>
                   <S.Thumb style={{ backgroundImage: `url(${option.picture})` }} />

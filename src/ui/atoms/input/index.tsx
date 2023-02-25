@@ -14,9 +14,11 @@ interface Props {
   mask?: Masks
   initial?: any
   min?: number
+  max?: number
+  step?: number
 }
 
-const Input = ({ label, type, name, error, onChange, placeholder, mask, initial, min }: Props, ref: ForwardedRef<HTMLInputElement>) => {
+const Input = ({ label, type, name, error, onChange, placeholder, mask, initial, min, max, step }: Props, ref: ForwardedRef<HTMLInputElement>) => {
   return (
     <FormControl isInvalid={!!error?.state}>
       {label && <FormLabel fontSize='1.6rem'>{label}:</FormLabel>}
@@ -25,7 +27,9 @@ const Input = ({ label, type, name, error, onChange, placeholder, mask, initial,
           <NumberInput
             defaultValue={initial}
             clampValueOnBlur={false}
+            max={max}
             min={min}
+            step={step}
             onChange={onChange}
           >
             <NumberInputField

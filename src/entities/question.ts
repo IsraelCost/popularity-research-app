@@ -48,4 +48,18 @@ export class Question {
     if (!option) throw new ApplicationError(`Alternativa ${optionId} não encontrada`, 404)
     option.votes.push(data)
   }
+
+  getVotesQuantity (): number {
+    return this.options.map(option => option.votes.length).reduce((previous, current) => previous + current)
+  }
+
+  getVotesPercentage (optionId: string) {
+    const total = this.getVotesQuantity()
+    const option = this.getOption(optionId)
+    return (option.votes.length / total) * 100
+  }
+
+  getMultiple (): number {
+    return 100 / this.getVotesQuantity()
+  }
 }
